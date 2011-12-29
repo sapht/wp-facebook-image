@@ -25,8 +25,14 @@ function get_featured_image_url() {
         global $post;
         if (has_post_thumbnail( $post->ID )) {
             $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'single-post-thumbnail' );
+            $home = get_option('home');
             if(0 !== strpos($image, "http://")) {
-                return sprintf('http://%s/%s', get_option('home'), $image[0]);
+                if (0 == strpos($home, 'http://')) {
+                    // I have no idea what the value is supposed to be, so, ifcases
+                    return sprintf('%s/%s', $home, $image[0]);
+                } else {
+                    return sprintf('http://%s/%s', $home, $image[0]);
+                }
             } else {
                 return $image[0];
             }
